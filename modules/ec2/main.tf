@@ -24,7 +24,7 @@ resource "aws_instance" "this" {
   ami           = data.aws_ami.amazon_linux.id
   instance_type = var.instance_type
   subnet_id     = each.value.subnet_id
-  key_name      = data.aws_key_pair.default.key_name
+  key_name      = var.key_name 
   vpc_security_group_ids = [var.security_group_id]
 
   user_data = <<-EOF

@@ -1,19 +1,19 @@
 variable "public_subnet_ids" {
-  description = "List of public subnet IDs"
   type        = list(string)
+  description = "List of public subnet IDs"
 }
 
 variable "private_subnet_ids" {
-  description = "List of private subnet IDs"
   type        = list(string)
+  description = "List of private subnet IDs"
 }
 
 variable "public_route_table_id" {
-  description = "ID of the public route table"
   type        = string
+  description = "Public route table ID"
 }
 
 variable "private_route_table_id" {
-  description = "ID of the private route table"
   type        = string
+  description = "Private route table ID"
 }

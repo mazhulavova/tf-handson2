@@ -1,35 +1,15 @@
 variable "vpc_id" {
-  description = "VPC ID"
+  description = "ID of the VPC"
   type        = string
 }
 
 variable "igw_id" {
-  description = "Internet Gateway ID"
+  description = "ID of the Internet Gateway"
   type        = string
 }
 
-variable "natgw_id" {
-  description = "NAT Gateway ID"
+variable "nat_gateway_id" {
+  description = "ID of the NAT Gateway"
   type        = string
 }
 
-variable "public_subnet_ids" {
-  description = "List of public subnet IDs"
-  type        = list(string)
-}
-
-variable "private_subnet_ids" {
-  description = "List of private subnet IDs"
-  type        = list(string)
-}
-
-variable "name_prefix" {
-  description = "Prefix for route table names"
-  type        = string
-}
-
-variable "tags" {
-  description = "Common tags"
-  type        = map(string)
-  default     = {}
-}
