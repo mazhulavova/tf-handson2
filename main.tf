@@ -92,40 +92,32 @@ module "target_group" {
     Project     = "my-project"
   }
 }
+provider "aws" {
+  region = "us-east-1"
+}
+
+data "aws_route53_zone" "primary" {
+  name = "rozdavalo.com"
+}
+
 module "ssl_tls" {
-  source = "./modules/ssl_tls"
-
+  source      = "./modules/ssl_tls"
   domain_name = "rozdavalo.com"
-  subject_alternative_names = ["www.rozdavalo.com"]
-  route53_zone_id = "Z018554930KHD4P0FHFY8"  # Replace with your real hosted zone ID
-
-  tags = {
-    Environment = "dev"
-    Name        = "acm-cert"
-  }
+  zone_id     = data.aws_route53_zone.primary.zone_id
 }
 module "load_balancer" {
-  source = "./modules/load_balancer"
-
-  name              = "my-alb"
+  source            = "./modules/load_balancer"
+ sg_id              = module.security_group.security_group_id
   subnet_ids        = module.subnets.public_subnet_ids
-  security_group_id = module.security_group.security_group_id
-
-  target_group_arn  = module.target_group.target_group_arn
   certificate_arn   = module.ssl_tls.certificate_arn
-  enable_https      = true
-
-  tags = {
-    Environment = "dev"
-    Project     = "my-web"
-  }
+  target_group_arn  = module.target_group.arn
 }
+
+
 module "route53" {
-  source = "./modules/route53"
-
-  zone_id       = "Z018554930KHD4P0FHFY8"                  # Replace with your Route 53 Hosted Zone ID
-  record_name   = "www.rozdavalo.com"              # The domain or subdomain you want to use
-  alb_dns_name  = module.load_balancer.dns_name     # ALB DNS name from ALB module
-  alb_zone_id   = "Z35SXDOTRQ7X7K"                  # ALB's hosted zone ID (use correct one per region)
+  source        = "./modules/route53"
+  domain_name   = "rozdavalo.com"
+  zone_id       = data.aws_route53_zone.primary.zone_id
+  alb_dns_name  = module.load_balancer.alb_dns_name
+  alb_zone_id   = "Z35SXDOTRQ7X7K" # Use correct ALB hosted zone ID for your region (us-east-1)
 }
-

@@ -1,6 +1,6 @@
-resource "aws_route53_record" "alb_record" {
+resource "aws_route53_record" "alias" {
   zone_id = var.zone_id
-  name    = var.record_name
+  name    = var.domain_name
   type    = "A"
 
   alias {
@@ -9,3 +9,4 @@ resource "aws_route53_record" "alb_record" {
     evaluate_target_health = true
   }
 }
+
